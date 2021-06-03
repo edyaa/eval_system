@@ -1,6 +1,6 @@
 <h2>Тесты</h2>
 
-
+{% load static %}
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item">
     <a class="nav-link{% if active == 'new' %} active{% endif %}" href="{% url 'students:quiz_list' %}">Доступные</a>
@@ -10,5 +10,8 @@
   </li>
   <li class="nav-item">
     <a class="nav-link{% if active == 'students' %} active{% endif %}" href="{% url 'students:student_list' %}">Студенты</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link{% if active == 'vm' %} active{% endif %}" href="{% static "VM.pdf" %}" target="_blank" >Теоретический материал</a>
   </li>
 </ul>

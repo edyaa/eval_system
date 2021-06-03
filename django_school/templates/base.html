@@ -25,7 +25,7 @@
             <div class="col-6">
               <h1 class="logo">
                 <a href="{% url 'home' %}">
-                  АУК
+                  Автоматизированный Учебный Курс
                   {% if user.is_authenticated %}
                     {% if user.is_teacher %}
                       <span class="icon-feather" data-toggle="tooltip" data-placement="right" title="Профиль учителя"></span>
@@ -63,9 +63,6 @@
               {% endblock %}
             </div>
           </div>
-          <footer>
-            Казань - 2021
-          </footer>
         </div>
       </div>
     </div>

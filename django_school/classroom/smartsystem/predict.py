@@ -4,7 +4,7 @@ import random
 from sklearn.linear_model import LinearRegression
 
 
-def predict(score1, score2, score3):
+def alg():
 
     random_normal = np.random.normal(0, 0.35, size=2000)
     test = np.array(
@@ -48,12 +48,15 @@ def predict(score1, score2, score3):
     lm = LinearRegression()
     lm.fit(x_train, y_train)
 
+    return lm, mean, std
+
+model, mean, std = alg()
+
+def predict(score1, score2, score3):
     test = np.array([[score1, score2, score3]])
 
     test -= mean
     test /= std
+    predictions = model.predict(test)
 
-    predictions = lm.predict(test)
-
-    return round(predictions, 2)
-
+    return round(float(predictions))

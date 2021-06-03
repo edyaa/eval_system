@@ -117,7 +117,7 @@ def take_quiz(request, pk):
     student = request.user.student
 
     if student.quizzes.filter(pk=pk).exists():
-        return render(request, 'students/taken_quiz.html')
+        return render(request, 'students/taken_quiz_form.html')
 
     total_questions = quiz.questions.count()
     total_questions1 = quiz.questions.filter(type="1").count()
@@ -163,8 +163,6 @@ def take_quiz(request, pk):
                                             score1=percentage1, score2=percentage2, score3=percentage3)
 
 
-                    test = predict(percentage1, percentage2, percentage3)
-
                     student.score += percentage
                     student.score /= TakenQuiz.objects.filter(student=student).count()
                     student.score = round(student.score, 2)
@@ -180,6 +178,8 @@ def take_quiz(request, pk):
                     student.score3 += percentage3
                     student.score3 /= TakenQuiz.objects.filter(student=student).count()
                     student.score3 = round(student.score3, 2)
+
+                    test = predict(student.score1, student.score2, student.score3)
 
                     student.predict = test
 
@@ -263,7 +263,7 @@ class StudentMaps(View):
 
         data = {
             "name": "Курс",
-            "size": 8207,
+            "size": 10007,
             "children": []
         }
 
@@ -272,13 +272,13 @@ class StudentMaps(View):
             for j in range(pars[f"p{i}"]):
                 a.append(
                     {
-                        "name": f"Параграф {j + 1}", "size": 7507
+                        "name": f"Параграф {j + 1}", "size": 6807
                     }
                 )
 
             data["children"].append(
                 {
-                    "name": f"Раздел {i}", "size": 7907, "children": a
+                    "name": f"Раздел {i}", "size": 7707, "children": a
                 }
             )
             a = []

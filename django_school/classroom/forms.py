@@ -10,8 +10,8 @@ from classroom.models import (Answer, Question, Student, StudentAnswer,
 class TeacherSignUpForm(UserCreationForm):
 
     email = forms.CharField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
+    first_name = forms.CharField(label="Имя")
+    last_name = forms.CharField(label="Фамилия")
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -25,20 +25,17 @@ class TeacherSignUpForm(UserCreationForm):
                                          email=self.cleaned_data.get('email'),
                                          first_name=self.cleaned_data.get('first_name'),
                                          last_name=self.cleaned_data.get('last_name'),)
+
+
         return user
 
 
 class StudentSignUpForm(UserCreationForm):
     """Форма для создания интересов"""
-    #interests = forms.ModelMultipleChoiceField(
-    #    queryset=Subject.objects.all(),
-    #    widget=forms.CheckboxSelectMultiple,
-    #    required=True
-    #)
     email = forms.CharField()
-    first_name = forms.CharField()
-    last_name = forms.CharField()
-    group = forms.CharField()
+    first_name = forms.CharField(label="Имя")
+    last_name = forms.CharField(label="Фамилия")
+    group = forms.CharField(label="Группа")
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -94,7 +91,8 @@ class TakeQuizForm(forms.ModelForm):
         queryset=Answer.objects.none(),
         widget=forms.RadioSelect(),
         required=True,
-        empty_label=None)
+        empty_label=None,
+        label="Ответ")
 
     class Meta:
         model = StudentAnswer
