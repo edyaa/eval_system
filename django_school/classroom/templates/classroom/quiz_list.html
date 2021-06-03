@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'datatables/dataTables.bootstrap4.min.css' %}">
+{% endblock %}
+
+{% block content %}
+  {% include 'classroom/_guest_header.html' with active='quizzes' %}
+  
+  <table class="table table-bordered mb-0" id="tb_quizlist" >
+    <thead>
+      <tr>
+        <th>Тест</th>
+        <th class="d-none d-sm-table-cell">Тема</th>
+        <th class="d-none d-sm-table-cell">Вопросы</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for quiz in quizzes %}
+        <tr{% if quiz.subject.id in student_subjects %} style="background: #fdf7e3"{%endif%}>
+          <td class="align-middle">{{ quiz.name }}</td>
+          <td class="align-middle d-none d-sm-table-cell">{{ quiz.subject.get_html_badge }}</td>
+          <td class="align-middle d-none d-sm-table-cell">{{ quiz.questions_count }}</td>
+          <td class="text-right" data-orderable="false">
+            <a href="{% url 'students:take_quiz' quiz.pk %}" class="btn btn-primary">Начать тест</a>
+          </td>
+        </tr>
+      {% empty %}
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#tb_quizlist').DataTable({"order": [[ 2, "desc" ]]});
+});
+</script>
+{% endblock %}

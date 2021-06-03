@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'teachers:quiz_change_list' %}">Мои тесты</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'teachers:quiz_change' quiz.pk %}">{{ quiz.name }}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Результаты</li>
+    </ol>
+  </nav>
+  <h2 class="mb-3">{{ quiz.name }} Результаты</h2>
+  <p class="lead">Всего вопросов: {{total_questions}}</p>
+  <div class="card">
+    <div class="card-header">
+      <strong>Пройденные тесты</strong>
+      <span class="badge badge-pill badge-primary float-right">Средний результат: {{ quiz_score.average_score|default_if_none:0.0|floatformat:2 }}</span>
+    </div>
+    <table class="table mb-0">
+      <thead>
+        <tr>
+          <th>Студент</th>
+          <th>Дата</th>
+          <th>Баллы</th>
+          <th>Процент</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for taken_quiz in taken_quizzes %}
+          <tr>
+            <td>{{ taken_quiz.student.user.username }}</td>
+            <td>{{ taken_quiz.date|naturaltime }}</td>
+            <td>{{ taken_quiz.score }}</td>
+            <td>{{ taken_quiz.percentage }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="card-footer text-muted">
+      Total respondents: <strong>{{ total_taken_quizzes }}</strong>
+    </div>
+  </div>
+{% endblock %}

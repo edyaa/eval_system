@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags crispy_forms_filters %}
+
+{% block content %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'teachers:quiz_change_list' %}">Мои тесты</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'teachers:quiz_change' quiz.pk %}">{{ quiz.name }}</a></li>
+      <!-- <li class="breadcrumb-item active" aria-current="page">{{ question.text }}</li> -->
+    </ol>
+  </nav>
+  <h2 class="mb-3">{{ question.txt }}</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ formset.management_form }}
+   {{ form|crispy }}
+    <h5 class="mb-3">Вопрос: {{ question.text }}</h5>
+    <div class="card mb-3{% if formset.errors %} border-danger{% endif %}">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-8">
+            <strong>Ответы</strong>
+          </div>
+          <div class="col-2">
+            <strong>Правильный?</strong>
+          </div>
+          <div class="col-2">
+            <strong>Удалить?</strong>
+          </div>
+        </div>
+      </div>
+      {% for error in formset.non_form_errors %}
+        <div class="card-body bg-danger border-danger text-white py-2">{{ error }}</div>
+      {% endfor %}
+      <div class="list-group list-group-flush list-group-formset">
+        {% for form in formset %}
+          <div class="list-group-item">
+            <div class="row">
+              <div class="col-8">
+                {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                {{ form.text|as_crispy_field }}
+                {% if form.instance.pk and form.text.value != form.instance.text %}<p class="mb-0 mt-1"><small class="text-muted font-italic"><strong>Старый ответ:</strong> {{ form.instance.text }}</small></p>{% endif %}
+              </div>
+              <div class="col-2">
+                {{ form.is_correct }}
+              </div>
+              <div class="col-2">
+                {% if form.instance.pk %}
+                  {{ form.DELETE }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <p>
+      <small class="form-text text-muted">Вопрос должен иметь хотя бы <strong>2</strong> ответа и максимум <strong>10</strong> ответов. Выберите хотя бы один правильный ответ</small>
+    </p>
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+    <a href="{% url 'teachers:quiz_change' quiz.pk %}" class="btn btn-outline-secondary" role="button">Отмена</a>
+    <a href="{% url 'teachers:question_delete' quiz.pk question.pk %}" class="btn btn-danger float-right">Удалить</a>
+  </form>
+{% endblock %}
